@@ -1,0 +1,55 @@
+﻿@model List<TodoApp.Models.Todo>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+
+<p>Le nombre de tâches est : <strong>@ViewBag.count</strong></p>
+
+<a asp-action="Add" class="btn btn-primary">Ajouter une tâche</a>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Aucune tâche enregistrée.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Libellé</th>
+                <th>Description</th>
+                <th>Date limite</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Model[i].Libelle</td>
+                    <td>@Model[i].Description</td>
+                    <td>@Model[i].DateLimit.ToShortDateString()</td>
+                    <td>@Model[i].statut</td>
+                    <td>
+                        <a asp-action="Edit"
+                           asp-route-index="@i"
+                           class="btn btn-sm btn-warning">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-index="@i"
+                           class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

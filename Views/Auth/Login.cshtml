@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<form asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Login</label>
+        <input name="login" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Se connecter</button>
+</form>
+

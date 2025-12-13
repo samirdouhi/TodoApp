@@ -1,0 +1,34 @@
+﻿@model TodoApp.Models.Todo
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Êtes-vous sûr de vouloir supprimer cette tâche ?</h3>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Libellé</dt>
+    <dd class="col-sm-9">@Model.Libelle</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+
+    <dt class="col-sm-3">Date limite</dt>
+    <dd class="col-sm-9">@Model.DateLimit.ToShortDateString()</dd>
+
+    <dt class="col-sm-3">Statut</dt>
+    <dd class="col-sm-9">@Model.statut</dd>
+</dl>
+
+<form asp-action="DeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="index" value="@ViewBag.index" />
+
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+</form>
+

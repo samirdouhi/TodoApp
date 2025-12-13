@@ -1,0 +1,58 @@
+﻿@model TodoApp.Models.Todo
+@using TodoApp.Enums
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="index" value="@ViewBag.index" />
+
+            <div class="form-group">
+                <label asp-for="Libelle" class="control-label"></label>
+                <input asp-for="Libelle" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateLimit" class="control-label"></label>
+                <input asp-for="DateLimit" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="statut" class="control-label"></label><br />
+
+                <label>
+                    <input type="radio" asp-for="statut" value="@Statut.AFaire" />
+                    A faire
+                </label><br />
+
+                <label>
+                    <input type="radio" asp-for="statut" value="@Statut.EnCours" />
+                    En cours
+                </label><br />
+
+                <label>
+                    <input type="radio" asp-for="statut" value="@Statut.Termine" />
+                    Terminé
+                </label><br />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</div>
+
+
