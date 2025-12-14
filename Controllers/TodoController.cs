@@ -8,8 +8,7 @@ using TodoApp.ViewModels;
 
 namespace TodoApp.Controllers
 {
-    [LogFilter]
-    [AuthFilter]
+    [ServiceFilter(typeof(AuthFilter))]
     public class TodoController : Controller
     {
         ISessionManagerService session;//INJECTION DE DEPENDANCE
@@ -80,7 +79,7 @@ namespace TodoApp.Controllers
         // EDIT (POST)
        
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       
         public IActionResult Edit(int index, Todo todo)
         {
             List<Todo> list = session.Get<List<Todo>>("Todos", HttpContext);
@@ -116,7 +115,7 @@ namespace TodoApp.Controllers
         //  DELETE (POST)
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public IActionResult DeleteConfirmed(int index)
         {
             List<Todo> list = session.Get<List<Todo>>("Todos", HttpContext);

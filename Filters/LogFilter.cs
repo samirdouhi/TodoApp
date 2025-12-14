@@ -1,23 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace TodoApp.Filters
 {
-    public class LogFilter : ActionFilterAttribute
+    public class LogFilter : IAsyncActionFilter
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        private readonly IWebHostEnvironment _env;
+        private static readonly object _lock = new();
+
+        public LogFilter(IWebHostEnvironment env)
         {
-            var dateHeure = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            _env = env;
+        }
 
-            var controller =
-                context.RouteData.Values["controller"]?.ToString();
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            var http = context.HttpContext;
 
-            var action =
-                context.RouteData.Values["action"]?.ToString();
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var user = http.Session.GetString("User") ?? "Anonymous";
+            var controller = context.RouteData.Values["controller"]?.ToString() ?? "?";
+            var action = context.RouteData.Values["action"]?.ToString() ?? "?";
 
-            var line =
-                $"{dateHeure} - {controller} - {action}{Environment.NewLine}";
+            var line = $"{timestamp} – {user} – {controller} – {action}{Environment.NewLine}";
 
-            File.AppendAllText("log.txt", line);
+            // log.txt à la racine du projet
+            var path = Path.Combine(_env.ContentRootPath, "log.txt");
+
+            lock (_lock)
+            {
+                File.AppendAllText(path, line);
+            }
+
+            await next();
         }
     }
 }

@@ -3,19 +3,20 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace TodoApp.Filters
 {
-    public class AuthFilter : ActionFilterAttribute
+    public class AuthFilter : IAsyncActionFilter
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            // ⚠️ Mets ici la clé EXACTE que tu utilises pour stocker l'utilisateur en session
-            // Exemple : "User" / "Login" / "CurrentUser" ...
             var user = context.HttpContext.Session.GetString("User");
 
-            if (string.IsNullOrEmpty(user))
+            if (string.IsNullOrWhiteSpace(user))
             {
-                // bloque l’accès et redirige vers Auth/Login
+                // Pas connecté => redirection vers /Auth/Login
                 context.Result = new RedirectToActionResult("Login", "Auth", null);
+                return;
             }
+
+            await next();
         }
     }
 }
